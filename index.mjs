@@ -11,8 +11,8 @@ const finished = promisify(finishedCb);
 async function main() {
   const readStream = createReadStream('./random_text');
 
-  const lineStream = new LineStream();
-  const devNull = new NoOpStream();
+  const lineStream = new LineStream({ readableObjectMode: true });
+  const devNull = new NoOpStream({ objectMode: true });
 
   const writeStream = lineStream.pipe(devNull)
 
@@ -21,7 +21,6 @@ async function main() {
     output: writeStream
   });
 
-  await finished(writeStream);
   console.log('Stream has finished', lineStream.state);
 }
 

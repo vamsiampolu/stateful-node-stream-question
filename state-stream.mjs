@@ -1,20 +1,23 @@
 import { Transform } from 'stream';
 
 export default class LineStream extends Transform {
-  constructor() {
-   super();
+  constructor(args) {
+   super(args);
    this.state = [];
    this.storeState = this.storeState.bind(this);
   }
 
   storeState(chunk) {
      const line = chunk.toString();
-     state.push(line);
+     this.state.push(line);
+     return line;
   }
 
   _transform(chunk, enc, done) {
-   this.storeState(chunk);
-   this._write(line);
+   console.log('CHUNK');
+   const line = this.storeState(chunk);
+   this.push(line);
+   console.log('Wrote line', line);
    done();
   }
 }
